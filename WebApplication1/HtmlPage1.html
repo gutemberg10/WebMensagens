@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="estilos/estilo.css" rel="stylesheet">
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style>
+      
+    </style>
+    <input type="text" placeholder="Digite seu nome" id="txtNome">
+    <input type="text" placeholder="Digite sua mensangem" id="msg" />
+    <input type="button" value="Enviar" id="btn" />
+    <ul id="li">
+        
+    </ul>
+    <script>
+        $(function () {
+            var ws = new WebSocket('wss://us-nyc-1.piesocket.com/v3/1?api_key=PXTylH7wqVKkqUoVxrntub9Qiy12TG6prIG72mXG0oUGYdZyjlimxDxnsrTJ&notify_self');
+
+            var log = function (msg) {
+                $('#li').append(`<li>${msg}</li>`);
+            };
+
+            ws.onopen = function (e) {
+                log('Entrou na sala');
+                ws.send('ENTROU NA SALA')
+            }
+
+            ws.onclose = function (e) {
+                log(' saiu na sala');
+                ws.send(' saiu na sala')
+            }
+
+            ws.onmessage = function (e) {
+                log(e.data);
+            }
+
+            $("#btn").click(function () {
+                var nome = $("#txtNome").val();
+
+                var msg = nome + ":" +  $("#msg").val()
+
+                ws.send(msg);
+
+                log(msg);
+            })
+
+
+        });
+    </script>
+</body>
+</html>
